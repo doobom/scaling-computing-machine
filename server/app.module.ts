@@ -1,0 +1,45 @@
+import { APP_FILTER } from '@nestjs/core';
+import { Module } from '@nestjs/common';
+import { PlatformModule } from '@lark-apaas/fullstack-nestjs-core';
+
+import { GlobalExceptionFilter } from './common/filters/exception.filter';
+import { ViewModule } from './modules/view/view.module';
+import { ProductModule } from './modules/product/product.module';
+import { OrderModule } from './modules/order/order.module';
+import { MarketingModule } from './modules/marketing/marketing.module';
+import { MemberModule } from './modules/member/member.module';
+import { PaymentModule } from './modules/payment/payment.module';
+import { ReceiptModule } from './modules/receipt/receipt.module';
+import { CouponModule } from './modules/coupon/coupon.module';
+import { AfterSalesModule } from './modules/after-sales/after-sales.module';
+import { StatisticsModule } from './modules/statistics/statistics.module';
+
+@Module({
+  imports: [
+    // 平台 Module，提供平台能力
+    PlatformModule.forRoot(),
+    // ====== @route-section: business-modules START ======
+    // Place all business modules here.Do NOT add fallback modules here.
+    ProductModule,
+    OrderModule,
+    MarketingModule,
+    MemberModule,
+    PaymentModule,
+    ReceiptModule,
+    CouponModule,
+    AfterSalesModule,
+    StatisticsModule,
+    // ====== @route-section: business-modules END ======
+
+    // ⚠️ @route-order: last
+    // ViewModule is the fallback route module, must be registered last.
+    ViewModule,
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: GlobalExceptionFilter,
+    },
+  ],
+})
+export class AppModule {}
